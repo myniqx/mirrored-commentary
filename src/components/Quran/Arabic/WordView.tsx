@@ -20,7 +20,7 @@ export const WordView: React.FC<WordViewProps> = ({
 }) => {
   const [visible, setVisible] = React.useState(false);
   const { getTurkish } = useQuranContext();
-  const { fontSize } = usePageLine()
+  const { fontSize } = usePageLine();
 
   const turks = getTurkish(surah, ayah)[wordIndex];
   const [width, setWidth] = React.useState(0);
@@ -42,7 +42,9 @@ export const WordView: React.FC<WordViewProps> = ({
           textAlign: "center",
         }}
         onPress={() => setVisible(!visible)}
-        onLayout={(event: LayoutChangeEvent) => setWidth(event.nativeEvent.layout.width ?? width)}
+        onLayout={(event: LayoutChangeEvent) =>
+          setWidth(event.nativeEvent.layout.width ?? width)
+        }
       >
         {word}
       </Text>
@@ -55,7 +57,7 @@ export const WordView: React.FC<WordViewProps> = ({
             cursor: "pointer",
             overflow: "hidden",
             textAlign: "center",
-            maxWidth: width
+            maxWidth: width,
           }}
           onPress={() => setVisible(false)}
         >

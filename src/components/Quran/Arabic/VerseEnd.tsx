@@ -44,7 +44,7 @@ export const VerseEnd: React.FC<VerseEndProps> = ({ surah, ayah }) => {
     .reverse()
     .join("");
 
-  const { fontSize } = usePageLine()
+  const { fontSize } = usePageLine();
 
   return (
     <View>
@@ -52,8 +52,8 @@ export const VerseEnd: React.FC<VerseEndProps> = ({ surah, ayah }) => {
         style={{
           fontFamily: "arabic",
           fontSize: fontSize / 2,
-          userSelect: 'none',
-          cursor: 'pointer'
+          userSelect: "none",
+          cursor: "pointer",
         }}
         numberOfLines={1}
       >

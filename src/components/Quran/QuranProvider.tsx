@@ -15,8 +15,8 @@ interface QuranContextProps {
   hasLineEnding: (sure: number, ayet: number, wordIndex: number) => boolean;
   getArabic: (sure: number, ayet: number) => string[];
   getTurkish: (sure: number, ayet: number) => string[];
-  setBookmark: (page: number, id?: number) => void
-  bookmarks: BookmarkData[]
+  setBookmark: (page: number, id?: number) => void;
+  bookmarks: BookmarkData[];
 }
 
 export const QuranContext = createContext<QuranContextProps>(
@@ -26,7 +26,10 @@ export const QuranContext = createContext<QuranContextProps>(
 type QuranProviderProps = PropsWithChildren;
 
 export const QuranProvider: React.FC<QuranProviderProps> = ({ children }) => {
-  const [bookmarks, setBookmarks] = useLocalStorage<BookmarkData[]>("bookmarks", []);
+  const [bookmarks, setBookmarks] = useLocalStorage<BookmarkData[]>(
+    "bookmarks",
+    [],
+  );
   const hasLineEnding = (sure: number, ayet: number, wordIndex: number) => {
     return endings[sure - 1]?.[ayet]?.includes(wordIndex);
   };
@@ -43,20 +46,22 @@ export const QuranProvider: React.FC<QuranProviderProps> = ({ children }) => {
     const bm = id ? bookmarks.find((b) => b.id === id) : undefined;
     if (bm) {
       if (bm.page === page) {
-        return
+        return;
       }
-      bm.page = page
-      bm.last_seen = new Date().toISOString()
-      setBookmarks([bm, ...bookmarks.filter((b) => b.id !== id)])
+      bm.page = page;
+      bm.last_seen = new Date().toISOString();
+      setBookmarks([bm, ...bookmarks.filter((b) => b.id !== id)]);
+    } else {
+      setBookmarks([
+        {
+          id: id ?? Date.now(),
+          page,
+          last_seen: new Date().toISOString(),
+        },
+        ...bookmarks,
+      ]);
     }
-    else {
-      setBookmarks([{
-        id: id ?? Date.now(),
-        page,
-        last_seen: new Date().toISOString()
-      }, ...bookmarks])
-    }
-  }
+  };
 
   return (
     <QuranContext.Provider
@@ -65,7 +70,7 @@ export const QuranProvider: React.FC<QuranProviderProps> = ({ children }) => {
         getArabic,
         getTurkish,
         setBookmark,
-        bookmarks
+        bookmarks,
       }}
     >
       {children}
@@ -76,9 +81,16 @@ export const QuranProvider: React.FC<QuranProviderProps> = ({ children }) => {
 export const useQuranContext = () => React.useContext(QuranContext);
 
 export const getSurahDetails = (sure: number) => {
-  const [order, isMekki, name, totalAyahs] = surah_details[sure - 1];
-  return { order, isMekki, name, totalAyahs };
-}
+  const [order, page, isMekki, name, totalAyahs] = surah_details[sure - 1];
+  return {
+    order,
+    page,
+    juz: Math.ceil(Math.min(page, 600) / 20),
+    isMekki,
+    name,
+    totalAyahs
+  };
+};
 
 export const hasBasmala = (sure: number) => {
   return sure !== 1 && sure !== 9;

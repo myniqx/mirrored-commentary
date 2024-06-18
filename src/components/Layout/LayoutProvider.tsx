@@ -5,7 +5,7 @@ import React, {
   useState,
 } from "react";
 import { View } from "react-native";
-import { IconButton, Text, useTheme } from "react-native-paper";
+import { TextInput, Icon, IconButton, Text, useTheme } from "react-native-paper";
 import { LayoutHeader } from "./LayoutHeader";
 import * as Application from "expo-application";
 
@@ -15,6 +15,9 @@ interface LayoutProviderProps {
   setVisibleHeader: (value: boolean) => void;
   setHeaderContent: (value: ReactNode | null) => void;
   toggleDarkTheme: () => void;
+  toggleSearch: () => void;
+  searchText?: string
+  setSearchID: (value: string) => void;
 }
 
 export const LayoutContext = createContext<LayoutProviderProps>(
@@ -33,6 +36,12 @@ export const LayoutProvider: React.FC<ProviderProps> = ({
   const [headerContent, setHeaderContent_] = useState<ReactNode>(
     <Text>{Application.applicationName}</Text>,
   );
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchTexts, setSearchTexts] = useState<{ [key: string]: string }>({});
+  const [searchID, setSearchID] = useState("");
+  const searchText = searchVisible ?
+    searchTexts[searchID] ?? '' :
+    undefined;
 
   const setHeaderContent = (value: ReactNode | null) => {
     setHeaderContent_(value ?? <Text>{Application.applicationName}</Text>);
@@ -48,6 +57,9 @@ export const LayoutProvider: React.FC<ProviderProps> = ({
         setHeaderContent,
         setVisibleHeader,
         toggleDarkTheme,
+        toggleSearch: () => setSearchVisible(!searchVisible),
+        searchText,
+        setSearchID,
       }}
     >
       <View
@@ -60,7 +72,21 @@ export const LayoutProvider: React.FC<ProviderProps> = ({
         }}
       >
         {visibleHeader ? (
-          <LayoutHeader />
+          <>
+            <LayoutHeader />
+            {searchVisible &&
+              <TextInput
+                label="Search"
+                value={searchText ?? ''}
+                left={<Icon source="magnify" size={24} color={"black"} />}
+                mode="outlined"
+                onChangeText={(text) => setSearchTexts({ ...searchTexts, [searchID]: text })}
+                placeholder="type some names"
+                style={{
+                  margin: 6
+                }}
+              />}
+          </>
         ) : (
           <IconButton
             icon="close"

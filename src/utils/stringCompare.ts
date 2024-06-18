@@ -1,27 +1,31 @@
-
-
 const TRMap: Record<string, string> = {
-  'ç': 'c',
-  'ğ': 'g',
-  'ı': 'i',
-  'ö': 'o',
-  'ş': 's',
-  'ü': 'u',
+  ç: "c",
+  ğ: "g",
+  ı: "i",
+  ö: "o",
+  ş: "s",
+  ü: "u",
+  â: "a",
 };
 
 export const normalizeString = (str: string): string => {
   return str
     .toLowerCase()
-    .split('')
+    .split("")
     .map((char) => TRMap[char] || char)
-    .join('');
+    .join("");
 };
 
-export const splitStringByNormalizedWords = (text: string, normalizedWords: string[]): (string | string[])[] => {
+export type SplitStringResult = (string | string[])[];
+
+export const splitStringByNormalizedWords = (
+  text: string,
+  normalizedWords: string[],
+): SplitStringResult => {
   const normalizedText = normalizeString(text);
   const result: (string | string[])[] = [];
   let currentStart = 0;
-  let found = false
+  let found = false;
 
   for (let i = 0; i < normalizedWords.length; i++) {
     const normalizedWord = normalizedWords[i];
@@ -32,7 +36,7 @@ export const splitStringByNormalizedWords = (text: string, normalizedWords: stri
       }
       result.push([text.substring(index, index + normalizedWord.length)]);
       currentStart = index + normalizedWord.length;
-      found = true
+      found = true;
     }
   }
 

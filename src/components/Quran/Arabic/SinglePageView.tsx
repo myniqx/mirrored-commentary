@@ -62,11 +62,7 @@ export const SinglePageView: React.FC<SinglePageViewProps> = ({ page }) => {
 
       if (hasLineEnding(surah, ayah, -1)) {
         lines.push(
-          <PageLine
-            key={lines.length}
-            wordList={wordList}
-            isBasmala={false}
-          />,
+          <PageLine key={lines.length} wordList={wordList} isBasmala={false} />,
         );
         wordList = [];
       }
@@ -74,11 +70,7 @@ export const SinglePageView: React.FC<SinglePageViewProps> = ({ page }) => {
 
     if (wordList.length > 0) {
       lines.push(
-        <PageLine
-          key={lines.length}
-          wordList={wordList}
-          isBasmala={false}
-        />,
+        <PageLine key={lines.length} wordList={wordList} isBasmala={false} />,
       );
     }
 

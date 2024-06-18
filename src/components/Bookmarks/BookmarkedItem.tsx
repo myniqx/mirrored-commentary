@@ -1,18 +1,17 @@
-import { View } from "react-native"
-import { Text } from "react-native-paper"
-import { page_content } from "../../constants/quran/pages"
-import { getSurahDetails } from "../Quran/QuranProvider"
+import { View } from "react-native";
+import { Text } from "react-native-paper";
+import { page_content } from "../../constants/quran/pages";
+import { getSurahDetails } from "../Quran/QuranProvider";
 
 export type BookmarkData = {
-  id: number
-  page: number
-  last_seen: string
-}
+  id: number;
+  page: number;
+  last_seen: string;
+};
 
 type BookmarkedItemProps = {
-  item: BookmarkData
-}
-
+  item: BookmarkData;
+};
 
 export const BookmarkedItem: React.FC<BookmarkedItemProps> = ({ item }) => {
   const pageContent = page_content[item.page];
@@ -23,5 +22,5 @@ export const BookmarkedItem: React.FC<BookmarkedItemProps> = ({ item }) => {
       <Text>{surahDetails.name}</Text>
       <Text>{item.last_seen}</Text>
     </View>
-  )
-}
+  );
+};

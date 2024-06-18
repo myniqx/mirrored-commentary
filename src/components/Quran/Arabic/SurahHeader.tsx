@@ -8,7 +8,7 @@ type SurahHeaderProps = {
 
 export const SurahHeader: React.FC<SurahHeaderProps> = (props) => {
   const theme = useTheme();
-  const surah = getSurahDetails(props.surah)
+  const surah = getSurahDetails(props.surah);
   const bracketSize = 64;
   return (
     <View
